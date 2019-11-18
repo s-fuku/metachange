@@ -1,0 +1,98 @@
+package volshift;
+
+import py4j.GatewayServer;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import java.util.Random;
+
+public class VolatilityDetector
+{
+  private int b;
+  private int r;
+  private double beta;
+
+  private Random rnd;
+  private List<Integer> buffer;
+  private List<Integer> reservoir;
+  /**
+   * Constructor for all required parameters.
+   * @param b  buffer size
+   * @param r  reservoir size
+   */
+  public VolatilityDetector(int b, int r, double beta, int seed)
+  {
+    this.b = b;
+    this.r = r;
+    this.beta = beta;
+    
+    List<Integer> buffer = new ArrayList<Integer>();
+    List<Integer> reservoir = new ArrayList<Integer>();
+    Random rnd = new Random(seed);
+
+    this.buffer = buffer;
+    this.reservoir = reservoir;
+    this.rnd = rnd;
+  } 
+
+  public boolean setInput(int x)
+  {
+    int j = addToBuffer(x);
+    if (j >= 0) {
+      addToReservoir(j); 
+    }
+    if ((this.buffer.size() == this.b) & (this.reservoir.size() == this.r)) {
+      double rel_var = variance(this.buffer) / variance(this.reservoir);
+      if ((rel_var >= 1.0 + this.beta) | (rel_var <= 1.0 - this.beta)) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  private int addToBuffer(int k)
+  {
+    this.buffer.add(k);
+    if (this.buffer.size() == this.b+1) {
+      return this.buffer.remove(0);
+    } else {
+      return -1;
+    }
+  }
+
+  private void addToReservoir(int k)
+  {
+    if (this.reservoir.size() < r) {
+      this.reservoir.add(k);
+    } else {
+      int rPos = this.rnd.nextInt(r);
+      this.reservoir.set(rPos, k);
+    }
+  }
+
+  private static int sum(List<Integer> list) {
+    int sum = 0;        
+    for (int i = 0; i < list.size(); i++){
+        sum = sum + list.get(i) ;
+    }
+    return sum;
+  }
+
+  private static double average(List<Integer> list) {  
+    double average = sum(list)/list.size();
+    return average;
+  }
+
+  private static double variance(List<Integer> list)
+  {
+    double sumDiffsSquared = 0.0;
+    double avg = average(list);
+    for (int value : list) {
+       double diff = value - avg;
+       diff *= diff;
+       sumDiffsSquared += diff;
+    }
+    return sumDiffsSquared  / (list.size()-1);
+  }
+}
