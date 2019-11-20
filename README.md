@@ -1,4 +1,4 @@
-# metachange
+# metachange detection
 
 Code for the paper [Detecting metachanges in data streams from the viewpint of the MDL Principle]. <br>
 
