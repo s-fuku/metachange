@@ -1,8 +1,11 @@
 # metachange
+
 === 
+
 Code for the paper [Detecting metachanges in data streams from the viewpint of the MDL Principle]. 
 
 ===
+
 Shintaro Fukushima and Kenji Yamanishi, <br>
 Detecting metachanges in data streams from the viewpint of the MDL Principle. <br>
 Entropy 2019, 21(12), 1134. <br>
