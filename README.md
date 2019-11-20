@@ -1,6 +1,6 @@
 # metachange detection
 
-Code for the paper [Detecting metachanges in data streams from the viewpint of the MDL Principle]. <br>
+Code for the following paper. <br>
 
 Shintaro Fukushima and Kenji Yamanishi, <br>
 Detecting metachanges in data streams from the viewpoint of the MDL Principle. <br>
